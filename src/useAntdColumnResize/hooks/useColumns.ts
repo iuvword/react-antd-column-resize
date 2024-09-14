@@ -2,7 +2,7 @@ import { useRef, useMemo, useState, useCallback } from 'react';
 import { Column, resizeDataType } from '../types';
 import { INTERNAL_KEY } from '../constant';
 
-const useColumns = ({ columns, minWidth = 120, maxWidth = 2000, }: resizeDataType<Column>) => {
+const useColumns = ({ columns, minWidth = 120, maxWidth = 2000, onResize }: resizeDataType<Column>) => {
 
   const columnMap = useRef(new Map<string | number, number>()).current;
 
@@ -24,6 +24,7 @@ const useColumns = ({ columns, minWidth = 120, maxWidth = 2000, }: resizeDataTyp
 
   const handleResizableColumns = useCallback((key: string | number, interWidth: number) => {
     columnMap.set(key, interWidth);
+    if (typeof onResize === 'function') onResize(key, interWidth);
     setResizableColumns((prev) => prev?.map((column) => updateResizableColumns(column, key, interWidth)));
   }, []);
 
